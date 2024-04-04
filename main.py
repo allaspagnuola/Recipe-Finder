@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request,flash
 from bson import ObjectId
 
 from db import db
@@ -56,10 +56,6 @@ def insert_one():
     dict_to_return["_id"] = str(dict_to_return["_id"])
     return dict_to_return
 
-# create an insert page
-@app.route("/insert")
-def insert():
-    return open("insert.html")
 
 # Part 5: HTTP Delete method - API to remove one recipe from the database by ID
 # e.g. body might be {"_id": "63089f6c32adbaebfa6e8d06"}
@@ -74,6 +70,35 @@ def remove_one():
     db.collection.delete_one(dict_to_query)
 
     return f"successfully deleted {dict_to_query['_id']}"
+
+@app.route('/insert', methods=('GET', 'POST'))
+def register():
+    if request.method == 'POST':
+        name = request.form["name"],
+        ingredients = request.form["ingredients"],
+        method = request.form["method"],
+        error = None
+
+        if not name:
+            error = 'Name is required.'
+        elif not ingredients:
+            error = 'Ingredient is required.'
+        elif not method:
+            error = 'Method is required.'
+
+        
+        # REMEMBER to add 
+        if not error:
+            dict_to_return = {
+                "name": name,
+                "ingredients": ingredients,
+                "method": method,
+            }
+            db.collection.insert_one(dict_to_return)
+
+        flash(error)
+
+    return open("insert.html")
 
 
 
