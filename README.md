@@ -1,2 +1,2 @@
 # Hackathon
-A rep for codebrew hackathon.
+A repo for codebrew hackathon.
