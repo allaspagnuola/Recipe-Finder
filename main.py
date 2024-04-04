@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, render_template, flash
 from bson import ObjectId
 
 
@@ -22,8 +22,6 @@ def flask_mongodb_atlas():
 def test():
     all = db.collection.find()
 
-    # For each document, convert _id from type ObjectId to string so it can be JSON serializable
-    ids = []
     for doc in all:
         db.collection.delete_one({"_id": doc["_id"]})      
 
@@ -93,5 +91,81 @@ def remove_one():
 
 
 
+'''
+Some more stuff
+Will clean this up later
+'''
+
+@app.route('/register', methods=('GET', 'POST'))
+def register():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        error = None
+
+        if not username:
+            error = 'Username is required.'
+        elif not password:
+            error = 'Password is required.'
+
+        
+        # REMEMBER to add 
+        if not error:
+            dict_to_return = {
+                "username": username,
+                "password": password,
+            }
+            db.collection.insert_one(dict_to_return)
+
+        flash(error)
+
+    return render_template('auth/register.html')
+
+@app.route('/login', methods=('GET', 'POST'))
+def login():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        db = get_db()
+        error = None
+        user = db.execute(
+            'SELECT * FROM user WHERE username = ?', (username,)
+        ).fetchone()
+
+        if user is None:
+            error = 'Incorrect username.'
+        elif not check_password_hash(user['password'], password):
+            error = 'Incorrect password.'
+
+        if error is None:
+            session.clear()
+            session['user_id'] = user['id']
+            return redirect(url_for('index'))
+
+        flash(error)
+
+    return render_template('auth/login.html')
+
+@app.route('/logout')
+def logout():
+    session.clear()
+    return redirect(url_for('index'))
+
+def login_required(view):
+    @functools.wraps(view)
+    def wrapped_view(**kwargs):
+        if g.user is None:
+            return redirect(url_for('login'))
+
+        return view(**kwargs)
+
+    return wrapped_view
+
+
+
+
+
+
 if __name__ == "__main__":
+    app.secret_key = 'super secret key'
     app.run(port=8000, debug=True)
