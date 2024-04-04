@@ -4,6 +4,8 @@ from bson import ObjectId
 
 from db import db
 
+import json
+
 
 # Create Flask app to connect front-end, back-end, and database
 app = Flask(__name__)
@@ -18,8 +20,20 @@ def flask_mongodb_atlas():
 # Part 2: Test API - Insert hard-coded data to test connection to database
 @app.route("/test")
 def test():
-    db.collection.insert_one({"name": "CISSA"})
-    return "Connected to the database!"
+    all = db.collection.find()
+
+    # For each document, convert _id from type ObjectId to string so it can be JSON serializable
+    ids = []
+    for doc in all:
+        db.collection.delete_one({"_id": doc["_id"]})      
+
+    db.collection.insert_one({"name": "MUMS"})
+
+    f=open("test.json")
+    data=json.load(f)
+    for i in data:
+        db.collection.insert_one(i)
+    return "No CISSA anymore BINGO!"
 
 # Part 3: HTTP Get method - API to return all recipes currently stored in the database
 @app.route("/get-all")
