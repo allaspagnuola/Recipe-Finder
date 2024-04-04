@@ -56,7 +56,7 @@ def insert_one():
     dict_to_return["_id"] = str(dict_to_return["_id"])
     return dict_to_return
 
-# create an insert page
+
 @app.route("/insert")
 def insert():
     return open("insert.html")

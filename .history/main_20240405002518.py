@@ -37,6 +37,8 @@ def get_all():
 
 
 # Part 4: HTTP Post method - API to insert one recipe into the database
+@app.route("insert")
+def insert()
 @app.route("/insert-one", methods=["POST"])
 def insert_one():
     input_json = request.get_json()
@@ -56,10 +58,6 @@ def insert_one():
     dict_to_return["_id"] = str(dict_to_return["_id"])
     return dict_to_return
 
-# create an insert page
-@app.route("/insert")
-def insert():
-    return open("insert.html")
 
 # Part 5: HTTP Delete method - API to remove one recipe from the database by ID
 # e.g. body might be {"_id": "63089f6c32adbaebfa6e8d06"}
