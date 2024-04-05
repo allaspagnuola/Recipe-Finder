@@ -1,7 +1,12 @@
 from flask_pymongo import pymongo
+from dotenv import load_dotenv
+import os
 
 
-CONNECTION_STRING = "mongodb+srv://hazelchen1214:a12345@cluster0.jzt2jns.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+load_dotenv()
+
+CONNECTION_STRING = os.getenv("CONNECTION_STRING")
+
 
 
 # Create user that sends/receives requests
@@ -14,4 +19,3 @@ db = client.get_database("flask_mongodb_recipes")
 
 # Create a collection (JSON format dict) within the database
 collection = pymongo.collection.Collection(db, "collection")
-
