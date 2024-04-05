@@ -2,7 +2,7 @@ from flask import Flask, jsonify, request,flash
 from bson import ObjectId
 
 from db import db
-from recommendation import get_ingredients, get_recommendations
+from recommendation import get_ingredients, get_recommendation
 
 # Create Flask app to connect front-end, back-end, and database
 app = Flask(__name__)
@@ -111,10 +111,10 @@ def register():
     return open("insert.html")
 
 # Testing recommendation results 
-@app.route("/get-recommendations/<ingredients>")
+@app.route("/get-recommendation/<ingredients>")
 def test_get_recommendations(ingredients): 
     ingredients = ingredients.split(',')
-    return get_recommendations(ingredients)
+    return get_recommendation(ingredients)
 
 
 
