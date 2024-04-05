@@ -35,6 +35,29 @@ def get_all():
     # Return as JSON type
     return jsonify(data)
 
+@app.route("/get-ingredients")
+def data_processing():
+    all = db.collection.find()
+    ingredients =[]
+    for doc in all:
+        ingredients.append(get_ingredients(doc))
+ 
+    return ingredients
+
+def get_ingredients(doc):
+    ingredients = []
+    try:
+        if ',' in doc['ingredients']:
+            doc['ingredients'].split(',')
+            for i in doc['ingredients'].split(','):
+                ingredients.append(i.split(":")[0])
+        else:
+            ingredients.append(doc['ingredients'].split(":")[0])
+    except:
+        pass
+    return ingredients
+
+
 
 # Part 4: HTTP Post method - API to insert one recipe into the database
 @app.route("/insert-one", methods=["POST"])
