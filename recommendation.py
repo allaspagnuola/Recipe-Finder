@@ -7,7 +7,7 @@ def get_ingredients(doc):
         if ',' in doc['ingredients']:
             doc['ingredients'].split(',')
             for i in doc['ingredients'].split(','):
-                ingredients.append(i.split(":")[0])
+                ingredients.append(i.split(":")[0].strip())
         else:
             ingredients.append(doc['ingredients'].split(":")[0])
     except:
