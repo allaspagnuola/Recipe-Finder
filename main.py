@@ -24,11 +24,11 @@ def test():
 @app.route("/get-all")
 def get_all():
     # Collect all the data from the database
-    all = db.collection.find()
+    all = db.collection.find() # all: pymongo.cursor.Cursor
 
     # For each document, convert _id from type ObjectId to string so it can be JSON serializable
     data = []
-    for doc in all:
+    for doc in all: # doc: dict
         doc["_id"] = str(doc["_id"])
         data.append(doc)
 
