@@ -17,7 +17,7 @@ body {
 }
 
 #content-main-card {
-    padding: 32px;
+    padding: 48px;
     background-color: white;
 }
 
@@ -77,14 +77,10 @@ body {
     color: #4c566a;
 }
 
-#recipe-form input {
+#recipe-form input, #recipe-form textarea {
     margin: 8px 0 24px 0;
+    font-family: inherit;
     font-size: 1rem;
-    padding: 0.5rem;
-}
-#recipe-form textarea {
-    margin: 8px 0 24px 0;
-    font-size: 0.9rem;
     min-width: 15rem;
     max-width: min(30rem, 80vw);
     padding: 0.5rem;

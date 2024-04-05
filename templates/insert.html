@@ -23,13 +23,13 @@
             <div id="card-content">
                 <form id="recipe-form" action="/insert-one" method="post">
                     <label for="name">Name</label>
-                    <input type="text" id="name" name="name" placeholder="Recipe name" required>
+                    <input type="text" id="name" name="name" placeholder="Recipe name..." required>
                     
                     <label for="ingredients">Ingredients</label>
-                    <textarea id="ingredients" name="ingredients" rows="4" required></textarea>
+                    <textarea id="ingredients" name="ingredients" rows="4" placeholder="Ingredients..." required></textarea>
                     
-                    <label for="method">Method</label>
-                    <textarea id="method" name="method" rows="4" required></textarea>
+                    <label for="tags">Tags</label>
+                    <textarea id="tags" name="tags" rows="4" placeholder="Tags..." required></textarea>
                     
                     <div id="submit-row">
                         <button class="submit-button" type="submit">Submit Recipe</button>
@@ -47,7 +47,7 @@
             var formData = {
                 name: document.getElementById("name").value,
                 ingredients: document.getElementById("ingredients").value,
-                method: document.getElementById("method").value
+                tags: document.getElementById("tags").value
             };
 
             // Send POST request to Flask server
