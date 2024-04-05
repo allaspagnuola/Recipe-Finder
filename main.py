@@ -1,4 +1,5 @@
-from flask import Flask, jsonify, request, render_template, flash, Blueprint, url_for
+from flask import Flask, jsonify, request, render_template, flash, Blueprint, url_for, session, redirect, g
+from werkzeug.security import check_password_hash, generate_password_hash
 from bson import ObjectId
 
 
@@ -46,10 +47,7 @@ def get_all():
     data = []
     for doc in all:
         doc["_id"] = str(doc["_id"])
-        try: 
-            data.append(doc["ingredients"])
-        except:
-            pass
+        data.append(doc)
 
 
     # Return as JSON type
@@ -144,7 +142,7 @@ def register():
         if not error:
             dict_to_return = {
                 "username": username,
-                "password": password,
+                "password": generate_password_hash(password),
             }
             db.collection.insert_one(dict_to_return)
 
@@ -157,9 +155,10 @@ def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        
-        user = db.Collection_name.find({"username" : username})
+        error = None
 
+        user = db.collection.find_one({"username" : username})
+        print(user)
 
         if user is None:
             error = 'Incorrect username.'
@@ -168,13 +167,13 @@ def login():
 
         if error is None:
             session.clear()
-            session['user_id'] = user['id']
-            return redirect(url_for('index'))
+            session['user_id'] = user['_id']
+            return redirect(url_for('home'))
 
         flash(error)
 
     return render_template('auth/login.html')
-'''
+
 @bp.before_app_request
 def load_logged_in_user():
     user_id = session.get('user_id')
@@ -201,7 +200,7 @@ def login_required(view):
 
     return wrapped_view
 
-'''
+
 
 
 
