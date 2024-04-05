@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request, flash, url_for
+from flask import Flask, jsonify, request, flash, url_for, render_template
 from bson import ObjectId
 
 from db import db
@@ -98,7 +98,7 @@ def register():
 
         flash(error)
 
-    return open("insert.html")
+    return render_template("insert.html")
 
 
 
