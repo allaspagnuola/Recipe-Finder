@@ -15,6 +15,32 @@
     --blue-3: #5e81ac;
 }
 
+body {
+    background-color: var(--white-2);
+    color: #3b4252;
+    font-family: Roboto;
+    padding: 0;
+    margin: 0;
+}
+
+#page-static {
+    min-height: 100vh;
+    max-width: 960px;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+#content-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
 button {
     position: relative;
     border-radius: 1em;

@@ -1,5 +1,5 @@
 
-#navbar {
+nav {
     display: flex;
     flex-flow: row-reverse nowrap;
     background-color: var(--white-2);
@@ -11,7 +11,7 @@
     column-gap: 1em;
 }
 
-#navbar > * {
+nav > * {
     font-size: 1rem;
     font-family: inherit;
     width: 8rem;
@@ -45,10 +45,58 @@
 
 #logo {
     font-size: 2em;
+    color: black;
+    text-decoration: none;
     user-select: none;
     font-family: 'Courier New';
 }
 
-#logo:hover {
-    cursor: pointer;
+nav > .navbar-button {
+    text-decoration: none;
+    box-sizing: border-box;
+    position: relative;
+    border-radius: 1em;
+    border: none;
+    padding: 1em;
+    font-weight: 600;
+}
+
+nav > .navbar-button::after {
+    content: '';
+    position: absolute;
+    border-radius: 1em;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    box-shadow: 1px 1px 2.5px rgb(0 0 0 / 20%);
+    opacity: 0;
+    transition: opacity 0.1s ease-in-out;
+    transition: color 0.1s ease-in-out;
+}
+
+nav > .navbar-button::before {
+    content: '';
+    position: absolute;
+    border-radius: 1em;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    box-shadow: inset -1px -1px 2.5px rgb(0 0 0 / 20%);
+    opacity: 0;
+    transition: opacity 0.1s ease-in-out;
+    transition: color 0.1s ease-in-out;
+}
+
+nav > .navbar-button:hover::after {
+    opacity: 1;
+}
+
+nav > .navbar-button:active::after {
+    opacity: 0;
+}
+
+nav > .navbar-button:active::before {
+    opacity: 1;
 }

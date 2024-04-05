@@ -1,118 +1,94 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% extends 'base.html' %}
+{% block title %}Submit a Recipe{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="static/insert.css">
+{% endblock %}
+
+{% block content %}
+<div id="content-main-card">
+    <div id="card-header">
+        <h1>Create a Recipe</h1>
+        <p>Got a recipe you like? Fill out the form and we'll add it to our database.</p>
+    </div>
     
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
-
-    <link rel="stylesheet" href="static/style.css">
-    <link rel="stylesheet" href="static/insert.css">
-    <link rel="stylesheet" href="static/navbar.css">
-
-    <title>Submit Recipe</title>
-</head>
-<body>
-    <div id="page-static">
-        <div id="navbar">
-            {% if g.user %}
-            <button id="logout" onclick="location.href='{{ url_for('auth.logout') }}'">Log Out</button>
-            <div>{{ g.user['username'] }}</div>
-            {% else %}
-            <button id="signin" onclick="location.href='{{ url_for('auth.login') }}'">Sign in</button>
-            <button id="register" onclick="location.href='{{ url_for('auth.register') }}'">Register</button>
-            {% endif %}
-            <div style="flex: 1"></div>
-            <div id="logo" onclick="location.href='{{ url_for('search') }}'">RF</div>
-        </div>
-
-        <div id="content-body">
-            <div id="content-main-card">
-                <div id="card-header">
-                    <h1>Create a Recipe</h1>
-                    <p>Got a recipe you like? Fill out the form and we'll add it to our database.</p>
+    <div id="card-content">
+        <form id="recipe-form">
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" placeholder="Recipe name..." required>
+            
+            <label for="ingredients">Ingredients</label>
+            <textarea id="ingredients" name="ingredients" rows="4" placeholder="Ingredients..." required></textarea>
+            
+            <p>Dietary Requirements</p>
+            <div id="dietary-reqs" class="checkbox-container">
+                <div>
+                    <input type="checkbox" id="gluten-free" name="gluten-free">
+                    <label for="gluten-free">Gluten Free</label>
                 </div>
-                
-                <div id="card-content">
-                    <form id="recipe-form">
-                        <label for="name">Name</label>
-                        <input type="text" id="name" name="name" placeholder="Recipe name..." required>
-                        
-                        <label for="ingredients">Ingredients</label>
-                        <textarea id="ingredients" name="ingredients" rows="4" placeholder="Ingredients..." required></textarea>
-                        
-                        <p>Dietary Requirements</p>
-                        <div id="dietary-reqs" class="checkbox-container">
-                            <div>
-                                <input type="checkbox" id="gluten-free" name="gluten-free">
-                                <label for="gluten-free">Gluten Free</label>
-                            </div>
-                            <div>
-                                <input type="checkbox" id="lactose-free" name="lactose-free">
-                                <label for="lactose-free">Lactose Free</label>
-                            </div>
-                        </div>
-
-                        <label for="cuisine">Cuisine</label>
-                        <select id="cuisine">
-                            <option value="mexican">Mexican</option>
-                            <option value="greek">Greek</option>
-                            <option value="french">French</option>
-                            <option value="chinese">Chinese</option>
-                        </select>
-                        
-                        <div id="submit-row">
-                            <button class="submit-button" type="submit">Submit Recipe</button>
-                        </div>
-                    </form>
+                <div>
+                    <input type="checkbox" id="lactose-free" name="lactose-free">
+                    <label for="lactose-free">Lactose Free</label>
                 </div>
             </div>
-        </div>
+
+            <label for="cuisine">Cuisine</label>
+            <select id="cuisine">
+                <option value="mexican">Mexican</option>
+                <option value="greek">Greek</option>
+                <option value="french">French</option>
+                <option value="chinese">Chinese</option>
+            </select>
+            
+            <div id="submit-row">
+                <button class="submit-button" type="submit">Submit Recipe</button>
+            </div>
+        </form>
     </div>
+</div>
+{% endblock %}
 
-    <script>
-        document.getElementById("recipe-form").addEventListener("submit", function(event) {
-            event.preventDefault(); // Prevent default form submission
+{% block scripts %}
+<script>
+    document.getElementById("recipe-form").addEventListener("submit", function(event) {
+        event.preventDefault(); // Prevent default form submission
 
-            // Get form data
-            dietary_reqs = []
-            dietary_reqs_dom = document.getElementById("dietary-reqs")
-                                       .getElementsByTagName("input");
+        // Get form data
+        dietary_reqs = []
+        dietary_reqs_dom = document.getElementById("dietary-reqs")
+                                   .getElementsByTagName("input");
 
-            console.log(dietary_reqs_dom)
-            for (const child of dietary_reqs_dom) {
-                if (child.checked) {
-                    dietary_reqs.push(child.name)
-                }
+        console.log(dietary_reqs_dom)
+        for (const child of dietary_reqs_dom) {
+            if (child.checked) {
+                dietary_reqs.push(child.name)
             }
+        }
 
-            var formData = {
-                name: document.getElementById("name").value,
-                ingredients: document.getElementById("ingredients").value,
-                dietary_requirements: dietary_reqs,
-                cuisine: document.getElementById("cuisine").value
-            };
+        var formData = {
+            name: document.getElementById("name").value,
+            ingredients: document.getElementById("ingredients").value,
+            dietary_requirements: dietary_reqs,
+            cuisine: document.getElementById("cuisine").value
+        };
 
-            // Send POST request to Flask server
-            fetch("/insert-one", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(formData)
-            })
-            .then(response => response.text())
-            .then(data => {
-                console.log(data); // Log server response
-                alert("Recipe submitted successfully!");
-            })
-            .catch(error => {
-                console.error("Error:", error);
-                alert("An error occurred. Please try again.");
-            });
+        // Send POST request to Flask server
+        fetch("/insert-one", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(formData)
+        })
+        .then(response => response.text())
+        .then(data => {
+            console.log(data); // Log server response
+            alert("Recipe submitted successfully!");
+        })
+        .catch(error => {
+            console.error("Error:", error);
+            alert("An error occurred. Please try again.");
         });
-    </script>
-</body>
-</html>
+    });
+</script>
+{% endblock %}
