@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submit Recipe</title>
+</head>
+<body>
+    <h1>Submit Recipe</h1>
+    <form id="recipe-form" action="/insert-one" method="post">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required><br><br>
+        
+        <label for="ingredients">Ingredients:</label><br>
+        <textarea id="ingredients" name="ingredients" rows="4" cols="50" required></textarea><br><br>
+
+        <label for="region">Region:</label><br>
+        <textarea id="region" name="region" rows="4" cols="50" required></textarea><br><br>
+        
+        <label for="dietaryRequirement">DietaryRequirement:</label><br>
+        <textarea id="dietaryRequirement" name="dietaryRequirement" rows="4" cols="50" required></textarea><br><br>
+        
+        <button type="submit">Submit Recipe</button>
+    </form>
+
+    <script>
+        document.getElementById("recipe-form").addEventListener("submit", function(event) {
+            event.preventDefault(); // Prevent default form submission
+
+            // Get form data
+            var formData = {
+                name: document.getElementById("name").value,
+                ingredients: document.getElementById("ingredients").value,
+                region: document.getElementById("region").value,
+                dietaryRequirement: document.getElementById("dietaryRequirement").value
+            };
+
+            // Send POST request to Flask server
+            fetch("/insert-one", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.text())
+            .then(data => {
+                console.log(data); // Log server response
+                alert("Recipe submitted successfully!");
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                alert("An error occurred. Please try again.");
+            });
+        });
+    </script>
+</body>
+</html>

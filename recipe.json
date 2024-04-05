@@ -1,0 +1,16 @@
+[
+    {
+        "_id": "660fcd087aa3782af2932b0c",
+        "dietaryRequirement": "radishes, Lactose free, Nut free, Vegan, Vegetarian",
+        "ingredients": "Napa cabbage:1,Garlic:4",
+        "name": "Korean kimchi",
+        "region": "Korean"
+    },
+    {
+        "_id": "660fcdc97aa3782af2932b0d",
+        "dietaryRequirement": "Nut free",
+        "ingredients": "Spaghetti:400 grams,Eggs:4,cheese:100 grams,Bacon:200 grams",
+        "name": "Carbonara",
+        "region": "Italian"
+    }
+]
