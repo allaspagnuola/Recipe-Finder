@@ -1,8 +1,64 @@
 :root {
-    --bg-1: white;
-    --bg-2: #eceff4;
+    --white-1: white;
+    --white-2: #eceff4;
+    --white-3: #e5e9f0;
+    --white-4: #d8dee9;
+
+    --black-1: black;
+    --black-2: #2e3440;
+    --black-3: #3b4252;
+    --black-4: #434c5e;
+    --black-5: #4c566a;
 
     --blue-1: #88c0d0;
     --blue-2: #81a1c1;
     --blue-3: #5e81ac;
+}
+
+button {
+    position: relative;
+    border-radius: 1em;
+    border: none;
+    padding: 1em;
+    font-weight: 600;
+}
+
+button::after {
+    content: '';
+    position: absolute;
+    border-radius: 1em;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    box-shadow: 1px 1px 2.5px rgb(0 0 0 / 20%);
+    opacity: 0;
+    transition: opacity 0.1s ease-in-out;
+    transition: color 0.1s ease-in-out;
+}
+
+button::before {
+    content: '';
+    position: absolute;
+    border-radius: 1em;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    box-shadow: inset -1px -1px 2.5px rgb(0 0 0 / 20%);
+    opacity: 0;
+    transition: opacity 0.1s ease-in-out;
+    transition: color 0.1s ease-in-out;
+}
+
+button:hover::after {
+    opacity: 1;
+}
+
+button:active::after {
+    opacity: 0;
+}
+
+button:active::before {
+    opacity: 1;
 }
