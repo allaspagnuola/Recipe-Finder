@@ -3,22 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="static/style.css">
+
     <title>Submit Recipe</title>
 </head>
 <body>
-    <h1>Submit Recipe</h1>
-    <form id="recipe-form" action="/insert-one" method="post">
-        <label for="name">Name:</label>
-        <input type="text" id="name" name="name" required><br><br>
-        
-        <label for="ingredients">Ingredients:</label><br>
-        <textarea id="ingredients" name="ingredients" rows="4" cols="50" required></textarea><br><br>
-        
-        <label for="method">Method:</label><br>
-        <textarea id="method" name="method" rows="4" cols="50" required></textarea><br><br>
-        
-        <button type="submit">Submit Recipe</button>
-    </form>
+    <div id="content-main-fixed">
+        <div id="content-main-card" class="vcenter">
+            <div id="card-header">
+                <h1>Create a Recipe</h1>
+                <p>Got a recipe you like? Fill out the form and we'll add it to our database.</p>
+            </div>
+            
+            <div id="card-content">
+                <form id="recipe-form" action="/insert-one" method="post">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" name="name" placeholder="Recipe name" required>
+                    
+                    <label for="ingredients">Ingredients</label>
+                    <textarea id="ingredients" name="ingredients" rows="4" required></textarea>
+                    
+                    <label for="method">Method</label>
+                    <textarea id="method" name="method" rows="4" required></textarea>
+                    
+                    <div id="submit-row">
+                        <button class="submit-button" type="submit">Submit Recipe</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
     <script>
         document.getElementById("recipe-form").addEventListener("submit", function(event) {

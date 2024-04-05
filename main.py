@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request,flash
+from flask import Flask, jsonify, request, flash, url_for
 from bson import ObjectId
 
 from db import db
@@ -104,3 +104,4 @@ def register():
 
 if __name__ == "__main__":
     app.run(port=8000, debug=True)
+    url_for('static', filename='style.css')
