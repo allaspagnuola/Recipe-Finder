@@ -1,15 +1,32 @@
 {% extends 'base.html' %}
 
-{% block header %}
-  <h1>{% block title %}Register{% endblock %}</h1>
+{% block title %}Register{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='auth.css') }}">
 {% endblock %}
 
 {% block content %}
-  <form method="post">
-    <label for="username">Username</label>
-    <input name="username" id="username" required>
-    <label for="password">Password</label>
-    <input type="password" name="password" id="password" required>
-    <input type="submit" value="Register">
-  </form>
+<div id="content-main-card">
+    <div id="card-header">
+        <h1>Register</h1>
+        <p>
+            Access your favourite recipes or automatically filter results
+            based on your dietary requirements.
+        </p>
+    </div>
+    
+    <div id="card-content">
+        <form id="recipe-form" method="post">
+            <label for="username">Username</label>
+            <input name="username" id="username" required>
+            <label for="password">Password</label>
+            <input type="password" name="password" id="password" required>
+            
+            <div id="submit-row">
+                <input type="submit" class="submit-button clickable" value="Register">
+            </div>
+        </form>
+    </div>
+</div>
 {% endblock %}

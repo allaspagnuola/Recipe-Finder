@@ -25,11 +25,11 @@
         <div id="page-static">
             <nav>
                 {% if g.user %}
-                <a id="logout" href='{{ url_for('auth.logout') }}'>Log Out</a>
+                <a id="logout" class="navbar-button clickable" href='{{ url_for('auth.logout') }}'>Log Out</a>
                 <div>{{ g.user['username'] }}</div>
                 {% else %}
-                <a id="signin" class="navbar-button" href='{{ url_for('auth.login') }}'>Sign in</a>
-                <a id="register" class="navbar-button" href='{{ url_for('auth.register') }}'>Register</a>
+                <a id="signin" class="navbar-button clickable" href='{{ url_for('auth.login') }}'>Sign in</a>
+                <a id="register" class="navbar-button clickable" href='{{ url_for('auth.register') }}'>Register</a>
                 {% endif %}
                 <div style="flex: 1"></div>
                 <a id="logo" href="{{ url_for('search') }}">RF</a>

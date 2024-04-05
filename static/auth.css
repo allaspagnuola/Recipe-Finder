@@ -1,19 +1,19 @@
-#recipe-form {
+form {
     display: flex;
     flex-flow: column nowrap;
 }
 
-#recipe-form label, #recipe-form p {
+form label, form p {
     margin: 0;
     font-size: small;
     font-weight: 400;
     color: var(--black-5);
 }
 
-#recipe-form > input,
-#recipe-form > select,
-#recipe-form > textarea,
-#recipe-form .checkbox-container {
+form > input,
+form > select,
+form > textarea,
+form .checkbox-container {
     margin: 8px 0 24px 0;
     font-family: inherit;
     font-size: 1rem;
@@ -22,26 +22,26 @@
     padding: 0.5rem;
 }
 
-#recipe-form > input,
-#recipe-form > select,
-#recipe-form > textarea {
+form > input,
+form > select,
+form > textarea {
     background-color: transparent;
     border: #808080 1px solid;
     border-radius: 2px;
 }
 
-#recipe-form > input:focus,
-#recipe-form > select:focus,
-#recipe-form > textarea:focus {
+form > input:focus,
+form > select:focus,
+form > textarea:focus {
     border: var(--blue-1) 1px solid;
 }
 
-#recipe-form .checkbox-container {
+form .checkbox-container {
     display: flex;
     flex-direction: column;
     row-gap: 1em;
 }
-#recipe-form .checkbox-container > * {
+form .checkbox-container > * {
     margin: 0;
     display: grid;
     grid-template-columns: 2em 1fr;

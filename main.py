@@ -229,3 +229,4 @@ if __name__ == "__main__":
     url_for('static', filename='insert.css')
     url_for('static', filename='home.css')
     url_for('static', filename='navbar.css')
+    url_for('static', filename='auth.css')

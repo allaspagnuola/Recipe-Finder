@@ -41,7 +41,51 @@ body {
     justify-content: center;
 }
 
-button {
+#content-main-card {
+    box-shadow: 5px 5px 10px rgb(0 0 0 / 20%);
+    background-color: var(--white-1);
+
+    padding: 48px;
+    margin: 2em;
+    border-radius: 2em;
+
+    display: flex;
+}
+
+@media (max-width: 960px) {
+    #content-main-card {
+        flex-flow: column;
+        column-gap: 2em;
+    }
+}
+@media (min-width: 960px) {
+    #content-main-card {
+        flex-flow: row;
+        row-gap: 0em;
+    }
+}
+
+
+#card-header {
+    padding: 1em;
+    padding-bottom: 0;
+}
+
+#card-header h1 {
+    font-size: 2.5em;
+    font-weight: 400;
+}
+
+#card-header p {
+    max-width: 25em;
+}
+
+#card-content {
+    padding: 1em;
+    padding-bottom: 0;
+}
+
+.clickable {
     position: relative;
     border-radius: 1em;
     border: none;
@@ -49,7 +93,7 @@ button {
     font-weight: 600;
 }
 
-button::after {
+.clickable::after {
     content: '';
     position: absolute;
     border-radius: 1em;
@@ -63,7 +107,7 @@ button::after {
     transition: color 0.1s ease-in-out;
 }
 
-button::before {
+.clickable::before {
     content: '';
     position: absolute;
     border-radius: 1em;
@@ -77,14 +121,14 @@ button::before {
     transition: color 0.1s ease-in-out;
 }
 
-button:hover::after {
+.clickable:hover::after {
     opacity: 1;
 }
 
-button:active::after {
+.clickable:active::after {
     opacity: 0;
 }
 
-button:active::before {
+.clickable:active::before {
     opacity: 1;
 }
