@@ -25,6 +25,7 @@ def priority_by_system(ingredients: list[str], recipe: dict) -> tuple:
     # Get the number of missing ingredients from the recipe
     num_missing = len(set(recipe)) - len(common_ingredients)
 
+    # Take all the scores into account 
     scores = (len(common_ingredients), -num_missing)
     return scores
 
