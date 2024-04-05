@@ -137,6 +137,9 @@ def register():
         elif not password:
             error = 'Password is required.'
 
+        if not db.collection.find_one({"username" : username}):
+            error = 'Username is taken.'
+
         
         # REMEMBER to add 
         if not error:
@@ -158,7 +161,6 @@ def login():
         error = None
 
         user = db.collection.find_one({"username" : username})
-        print(user)
 
         if user is None:
             error = 'Incorrect username.'
@@ -167,8 +169,8 @@ def login():
 
         if error is None:
             session.clear()
-            session['user_id'] = user['_id']
-            return redirect(url_for('home'))
+            session['user_id'] = str(user['_id'])
+            return redirect(url_for('search'))
 
         flash(error)
 
@@ -181,14 +183,12 @@ def load_logged_in_user():
     if user_id is None:
         g.user = None
     else:
-        g.user = get_db().execute(
-            'SELECT * FROM user WHERE id = ?', (user_id,)
-        ).fetchone()
+        g.user = db.collection.find_one({"_id" : ObjectId(user_id)})
 
 @bp.route('/logout')
 def logout():
     session.clear()
-    return redirect(url_for('index'))
+    return redirect(url_for('search'))
 
 def login_required(view):
     @functools.wraps(view)
