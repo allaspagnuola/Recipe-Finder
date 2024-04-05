@@ -18,10 +18,15 @@ def priority_by_system(ingredients: list[str], recipe: dict) -> tuple:
     ''' Return a tuple of integers that represent the priority of the recipe 
         based on the number of matches on the input ingredients
     '''
-    # Get the number of matches between the ingredients 
+    # Get the number of matching ingredients  
     recipe_ingredients: list[str] = get_ingredients(recipe)
-    common_ingredients = set(ingredients + recipe_ingredients)
-    return (len(common_ingredients),)
+    common_ingredients = set(ingredients).intersection(set(recipe_ingredients))
+
+    # Get the number of missing ingredients from the recipe
+    num_missing = len(set(recipe)) - len(common_ingredients)
+
+    scores = (len(common_ingredients), -num_missing)
+    return scores
 
 def priority_by_user(tags: Tag, recipe) -> tuple: 
     ''' Return a tuple of integers that represent the priority of the recipe 
