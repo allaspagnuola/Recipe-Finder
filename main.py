@@ -111,7 +111,7 @@ def register():
     return open("insert.html")
 
 # Testing recommendation results 
-@app.route("/get-recommendation/<ingredients>")
+@app.route("/get-recommendations/<ingredients>")
 def test_get_recommendations(ingredients): 
     ingredients = ingredients.split(',')
     return get_recommendations(ingredients)

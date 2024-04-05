@@ -32,6 +32,9 @@ def priority_by_user(tags: Tag, recipe) -> tuple:
 
 def get_recommendations(ingredients: list[str]) -> list[dict]: 
     ''' Return a list of recipes sort be the degree of matching '''
-    recipes = list(db.collection.find())
+    recipes = []
+    for recipe in db.collection.find(): # doc: dict
+        recipe["_id"] = str(recipe["_id"])
+        recipes.append(recipe)
     recipes.sort(key=lambda recipe: priority_by_system(ingredients, recipe), reverse=True)
     return recipes 
