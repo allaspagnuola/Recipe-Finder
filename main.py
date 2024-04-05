@@ -211,3 +211,4 @@ if __name__ == "__main__":
     app.register_blueprint(bp)
     app.run(port=8000, debug=True)
     url_for('static', filename='style.css')
+    url_for('static', filename='insert.css')
