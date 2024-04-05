@@ -74,9 +74,9 @@ def remove_one():
 @app.route('/insert', methods=('GET', 'POST'))
 def register():
     if request.method == 'POST':
-        name = request.form["name"],
-        ingredients = request.form["ingredients"],
-        method = request.form["method"],
+        name = request.form["name"]
+        ingredients = request.form["ingredients"]
+        method = request.form["method"]
         error = None
 
         if not name:
