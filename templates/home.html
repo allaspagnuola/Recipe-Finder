@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Recipe Finder</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/static/home.css">
+</head>
+
+<body>
+    <div class="container">
+        <h1>Recipe Finder</h1>
+        <p>Share your ingredients</p>
+        <p>We provide you with recipes</p>
+
+        <nav class="navbar">
+            <a href="#">Recipe Finder</a>
+            <a href="#">Update Recipe</a>
+            <a href="#">Recipe Explorer</a>
+        </nav>
+
+        <form id="recipe-form" action="/home" method="post">
+            <input type="text" id="ingredients" placeholder="Please enter your ingredients, separated by commas">
+            <button type="submit" class="search-btn">Search</button>
+        </form>
+    </div>
+    
+    <script>
+        document.getElementById("recipe-form").addEventListener("submit", function(event) {
+            event.preventDefault(); // Prevent default form submission
+
+            // Get form data
+            var formData = {
+                ingredients: document.getElementById("ingredients").value,
+                // tags: document.getElementById("tags").value
+            };
+
+            // Send POST request to Flask server
+            fetch("/home", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.text())
+            .then(data => {
+                console.log(data); // Log server response
+                alert("Ingredients submitted successfully!");
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                alert("An error occurred. Please try again.");
+            });
+        });
+    </script>
+</body>
+</html>
