@@ -92,7 +92,7 @@ def remove_one():
 
     return f"successfully deleted {dict_to_query['_id']}"
 @app.route('/insert', methods=('GET', 'POST'))
-def register():
+def insert():
     if request.method == 'POST':
         name = request.form["name"]
         ingredients = request.form["ingredients"]
@@ -137,7 +137,7 @@ def register():
         elif not password:
             error = 'Password is required.'
 
-        if not db.collection.find_one({"username" : username}):
+        if db.collection.find_one({"username" : username}) != None:
             error = 'Username is taken.'
 
         

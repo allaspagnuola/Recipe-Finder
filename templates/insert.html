@@ -24,6 +24,8 @@
             <button id="signin" onclick="location.href='{{ url_for('auth.login') }}'">Sign in</button>
             <button id="register" onclick="location.href='{{ url_for('auth.register') }}'">Register</button>
             {% endif %}
+            <div style="flex: 1"></div>
+            <div id="logo" onclick="location.href='{{ url_for('search') }}'">RF</div>
         </div>
 
         <div id="content-body">
