@@ -2,7 +2,7 @@ from flask import Flask, jsonify, request,flash
 from bson import ObjectId
 
 from db import db
-
+from flask import render_template
 # Create Flask app to connect front-end, back-end, and database
 app = Flask(__name__)
 
