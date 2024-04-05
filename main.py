@@ -2,6 +2,7 @@ from flask import Flask, jsonify, request,flash
 from bson import ObjectId
 
 from db import db
+from recommendation import get_ingredients, get_recommendations
 
 # Create Flask app to connect front-end, back-end, and database
 app = Flask(__name__)
@@ -43,20 +44,6 @@ def data_processing():
         ingredients.append(get_ingredients(doc))
  
     return ingredients
-
-def get_ingredients(doc):
-    ingredients = []
-    try:
-        if ',' in doc['ingredients']:
-            doc['ingredients'].split(',')
-            for i in doc['ingredients'].split(','):
-                ingredients.append(i.split(":")[0])
-        else:
-            ingredients.append(doc['ingredients'].split(":")[0])
-    except:
-        pass
-    return ingredients
-
 
 
 # Part 4: HTTP Post method - API to insert one recipe into the database
@@ -122,6 +109,12 @@ def register():
         flash(error)
 
     return open("insert.html")
+
+# Testing recommendation results 
+@app.route("/get-recommendation/<ingredients>")
+def test_get_recommendations(ingredients): 
+    ingredients = ingredients.split(',')
+    return get_recommendations(ingredients)
 
 
 
