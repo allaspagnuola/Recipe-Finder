@@ -148,8 +148,10 @@ def register():
                 "password": generate_password_hash(password),
             }
             db.collection.insert_one(dict_to_return)
+            return "login success"
 
-        flash(error)
+        # flash(error)
+        return error, 400
 
     return render_template('auth/register.html')
 

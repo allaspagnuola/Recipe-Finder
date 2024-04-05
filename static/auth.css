@@ -1,19 +1,17 @@
 form {
+    margin-top: 1em;
     display: flex;
     flex-flow: column nowrap;
 }
 
-form label, form p {
+form label {
     margin: 0;
     font-size: small;
     font-weight: 400;
     color: var(--black-5);
 }
 
-form > input,
-form > select,
-form > textarea,
-form .checkbox-container {
+form > input {
     margin: 8px 0 24px 0;
     font-family: inherit;
     font-size: 1rem;
@@ -22,39 +20,18 @@ form .checkbox-container {
     padding: 0.5rem;
 }
 
-form > input,
-form > select,
-form > textarea {
+form > input {
     background-color: transparent;
     border: #808080 1px solid;
     border-radius: 2px;
 }
 
-form > input:focus,
-form > select:focus,
-form > textarea:focus {
+form > input:focus {
     border: var(--blue-1) 1px solid;
 }
 
-form .checkbox-container {
-    display: flex;
-    flex-direction: column;
-    row-gap: 1em;
-}
-form .checkbox-container > * {
-    margin: 0;
-    display: grid;
-    grid-template-columns: 2em 1fr;
-}
-
-.checkbox-container > * > input {
-    grid-column: 1;
-    margin: 0;
-    padding: 0;
-}
-
-.checkbox-container > * > label {
-    grid-column: 2;
+form > input.invalid {
+    border-color: var(--red);
 }
 
 #submit-row {
@@ -69,4 +46,19 @@ form .checkbox-container > * {
 }
 .submit-button:hover {
     background: var(--blue-3);
+}
+
+.submit-button.invalid {
+    background: var(--black-5);
+    filter: contrast(50%);
+    color: white;
+}
+
+#error {
+    color: var(--red);
+    column-gap: 8px;
+    align-items: center;
+}
+#error-message {
+    flex: 1;
 }

@@ -13,6 +13,8 @@
     --blue-1: #88c0d0;
     --blue-2: #81a1c1;
     --blue-3: #5e81ac;
+
+    --red: #bf616a;
 }
 
 body {
@@ -65,12 +67,6 @@ body {
     }
 }
 
-
-#card-header {
-    padding: 1em;
-    padding-bottom: 0;
-}
-
 #card-header h1 {
     font-size: 2.5em;
     font-weight: 400;
@@ -78,11 +74,14 @@ body {
 
 #card-header p {
     max-width: 25em;
+    color: var(--black-4);
 }
 
 #card-content {
     padding: 1em;
     padding-bottom: 0;
+    display: inline-flex;
+    flex-flow: column nowrap;
 }
 
 .clickable {
@@ -121,14 +120,14 @@ body {
     transition: color 0.1s ease-in-out;
 }
 
-.clickable:hover::after {
+.clickable:hover::after:not(.invalid) {
     opacity: 1;
 }
 
-.clickable:active::after {
+.clickable:active::after:not(.invalid) {
     opacity: 0;
 }
 
-.clickable:active::before {
+.clickable:active::before:not(.invalid) {
     opacity: 1;
 }
