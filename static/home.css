@@ -31,7 +31,7 @@ p {
     background-color: #81a1c1;
     color: #fff;
     padding: 10px 0;
-    border-radius: 2px;
+    border-radius: 5px;
 }
 
 .navbar a {
@@ -68,8 +68,51 @@ p {
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    align-items: center;
 }
 
 .search-btn:hover {
     background-color: #4c566a;
+}
+
+#cuisine {
+    text-align: center;
+    width: 100px;
+}
+
+.checkbox-container{
+    margin-bottom: 20px;
+}
+
+.checkbox-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.checkbox-item input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+.checkbox-item label {
+    font-size: 16px;
+    color: #555;
+}
+
+.select-container label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 16px;
+    color: #555;
+}
+
+.select-container select {
+    width: 100%;
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
+    font-size: 16px;
+    color: #555;
+    margin-bottom: 10px;
 }

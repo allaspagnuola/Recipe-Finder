@@ -205,12 +205,17 @@ def login_required(view):
 
 @app.route('/home', methods=('GET', 'POST'))
 def search():
+    '''
+    returns a dictionary containing keys "ingredients", "dietary requirements", "cuisine"
+    '''
     if request.method == 'POST':
         input_json = request.json
         dict_to_return = {
             "ingredients": input_json["ingredients"],
+            "dietary requirements": input_json["dietary_requirements"],
+            "cuisine": input_json["cuisine"]
         }
-        print(dict_to_return)
+
         return jsonify(dict_to_return)
         
     return render_template("home.html")
