@@ -100,8 +100,20 @@ def register():
 
     return render_template("insert.html")
 
+@app.route('/home', methods=('GET', 'POST'))
+def search():
+    if request.method == 'POST':
+        input_json = request.json
+        dict_to_return = {
+            "ingredients": input_json["ingredients"],
+        }
+        print(dict_to_return)
+        return jsonify(dict_to_return)
+        
+    return render_template("home.html")
 
 
 if __name__ == "__main__":
     app.run(port=8000, debug=True)
     url_for('static', filename='style.css')
+    url_for('static', filename='home.css')
