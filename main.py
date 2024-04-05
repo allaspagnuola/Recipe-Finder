@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request, render_template, flash
+from flask import Flask, jsonify, request, render_template, flash, Blueprint
 from bson import ObjectId
 
 
@@ -9,6 +9,8 @@ import json
 
 # Create Flask app to connect front-end, back-end, and database
 app = Flask(__name__)
+bp = Blueprint('auth', __name__, url_prefix='/auth')
+
 
 
 # Part 1: Test Flask
@@ -44,7 +46,10 @@ def get_all():
     data = []
     for doc in all:
         doc["_id"] = str(doc["_id"])
-        data.append(doc)
+        try: 
+            data.append(doc["ingredients"])
+        except:
+            pass
 
 
     # Return as JSON type
@@ -96,7 +101,7 @@ Some more stuff
 Will clean this up later
 '''
 
-@app.route('/register', methods=('GET', 'POST'))
+@bp.route('/register', methods=('GET', 'POST'))
 def register():
     if request.method == 'POST':
         username = request.form['username']
@@ -121,7 +126,7 @@ def register():
 
     return render_template('auth/register.html')
 
-@app.route('/login', methods=('GET', 'POST'))
+@bp.route('/login', methods=('GET', 'POST'))
 def login():
     if request.method == 'POST':
         username = request.form['username']
@@ -145,8 +150,19 @@ def login():
         flash(error)
 
     return render_template('auth/login.html')
+'''
+@bp.before_app_request
+def load_logged_in_user():
+    user_id = session.get('user_id')
 
-@app.route('/logout')
+    if user_id is None:
+        g.user = None
+    else:
+        g.user = get_db().execute(
+            'SELECT * FROM user WHERE id = ?', (user_id,)
+        ).fetchone()
+
+@bp.route('/logout')
 def logout():
     session.clear()
     return redirect(url_for('index'))
@@ -161,11 +177,12 @@ def login_required(view):
 
     return wrapped_view
 
-
+'''
 
 
 
 
 if __name__ == "__main__":
     app.secret_key = 'super secret key'
+    app.register_blueprint(bp)
     app.run(port=8000, debug=True)
