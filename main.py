@@ -41,7 +41,7 @@ def data_processing():
     all = db.collection.find()
     ingredients =[]
     for doc in all:
-        ingredients.append(get_ingredients(doc))
+        ingredients.append(list(get_ingredients(doc)))
  
     return ingredients
 
@@ -113,7 +113,7 @@ def register():
 # Testing recommendation results 
 @app.route("/get-recommendation/<ingredients>")
 def test_get_recommendations(ingredients): 
-    ingredients = ingredients.split(',')
+    ingredients = set(ingredients.split(','))
     return get_recommendation(ingredients)
 
 
