@@ -139,10 +139,11 @@ def make_meal(ingredients: set[str], recipes: list[dict]) -> list[dict]:
         return []
     valid_recipes_score: tuple[dict, tuple] = list(map(lambda r: (r, matching_scores(ingredients, r)), valid_recipes))
     
-    return valid_recipes_score
+    
     print("valid recipes score", valid_recipes_score)
     # sort the valid recipes based on scores 
     valid_recipes_score.sort(key=lambda x: x[1], reverse=True)
+    #return valid_recipes_score
 
     print("recipe score", valid_recipes_score)
     most_matching_recipe, most_matching_score = valid_recipes_score[0]
@@ -159,9 +160,13 @@ def make_meal(ingredients: set[str], recipes: list[dict]) -> list[dict]:
 
 def get_recommendation(ingredients: set[str], dietary_requirements: set[DietaryRequirement] = set(), regions: set[Region] = set()) -> list[dict]: 
     ''' Return a list of recipes sort be the degree of matching '''
+
+    # get all the data that has the field "ingredients"
     all = db.collection.find({ "ingredients": {"$exists": True} })
+
+    # filter out the recipe matches the tags (i.e. dietary_requirements & regions)
     recipes: list[dict] = []
-    for recipe in all: # recipe: dict 
+    for recipe in all: 
         if requirements_satisfied(dietary_requirements, recipe) and region_contained(regions, recipe): 
             recipe["_id"] = str(recipe["_id"])
             recipes.append(recipe)
