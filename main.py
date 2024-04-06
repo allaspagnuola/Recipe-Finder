@@ -55,37 +55,6 @@ def get_all():
     # Return as JSON type
     return jsonify(data)
 
-<<<<<<< Updated upstream
-=======
-@app.route("/get-ingredients")
-def data_processing():
-    all = db.collection.find()
-    ingredients =[]
-    for doc in all:
-        try:
-            if doc["ingredients"]:
-                ingredients.append(get_ingredients(doc))
-        except:
-            pass
- 
-    return ingredients
-
-def get_ingredients(doc):
-    ingredients = []
-    try:
-        if ',' in doc['ingredients']:
-            doc['ingredients'].split(',')
-            for i in doc['ingredients'].split(','):
-                ingredients.append(i.split(":")[0])
-        else:
-            ingredients.append(doc['ingredients'].split(":")[0])
-    except:
-        pass
-    return ingredients
-
-
-
->>>>>>> Stashed changes
 # Part 4: HTTP Post method - API to insert one recipe into the database
 @app.route("/insert-one", methods=["POST"])
 def insert_one():
@@ -97,9 +66,9 @@ def insert_one():
     dict_to_return = {
         "name": input_json["name"],
         "ingredients": input_json["ingredients"],
-        "region": input_json["region"],
-        "dietaryRequirement": input_json["dietaryRequirement"],
-
+        "dietary_requirements" : input_json["dietary_requirements"],
+        "cuisine": input_json["cuisine"],
+        
     }
     db.collection.insert_one(dict_to_return)
     # the above call mutates dict_to_return to include the _id of the new entry
@@ -126,37 +95,42 @@ def remove_one():
 
 
     return f"successfully deleted {dict_to_query['_id']}"
+
 @app.route('/insert', methods=('GET', 'POST'))
 def register():
     if request.method == 'POST':
         name = request.form["name"]
         ingredients = request.form["ingredients"]
-        region = request.form["region"]
-        dietaryRequirement = request.form["dietaryRequirement"]
+        dietary_requirements = request.form["dietary_requirements"]
+        cuisine = request.form["cuisine"]
+
         error = None
 
         if not name:
             error = 'Name is required.'
         elif not ingredients:
             error = 'Ingredient is required.'
-        elif not region:
-            error = 'Region is required.'
-        elif not dietaryRequirement:
-            error = 'dietaryRequirement is required.'
+        # elif not dietary_requirements:
+        #     error = 'dietary_requirements is required.'
+        elif not cuisine:
+            error = 'cuisine.'
+
+
         
         # REMEMBER to add 
         if not error:
             dict_to_return = {
                 "name": name,
                 "ingredients": ingredients,
-                "region": region,
-                "dietaryRequirement": dietaryRequirement
+                "dietary_requirements": dietary_requirements,
+                "cuisine": cuisine
             }
             db.collection.insert_one(dict_to_return)
 
         flash(error)
 
     return render_template("insert.html")
+
 
 '''
 Some more stuff
