@@ -4,6 +4,11 @@
     <meta charset="utf-8">
     <title>Recipe Finder</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" href="/static/home.css">
     <link rel="stylesheet" href="/static/style.css">
 </head>
@@ -20,7 +25,7 @@
             <a href="{{ url_for('auth.login') }}">User Login</a>
         </nav>
 
-        <form id="recipe-form" action="/" method="post">
+        <form id="recipe-form">
             <input type="text" id="ingredients" placeholder="Please enter your ingredients, separated by commas">
 
             <h3>Put Your Dietary Requirements</h3>
@@ -47,9 +52,66 @@
             </div>
             <button type="submit" class="search-btn">Search</button>
         </form>
+
+        <div id="results">
+            <h1>Recommendations</h1>
+            <div id="results-list">
+            </div>
+        </div>
     </div>
     
     <script>
+        function generate_result_element(result_info) {
+            result_dom = document.createElement("div")
+            result_dom.classList.add("result-entry")
+            interior = `
+                <div style="grid-row: 1; grid-column: 1">
+                    <span style="font-size: 2rem;">${result_info["name"]}</span>
+                    <span style="font-style: italic;">${result_info["cuisine"]}<span>
+                </div>
+            `
+
+            interior = interior + `
+                <div style="grid-row: 2; grid-column: 1;">
+                    <h3 style="text-align: left">Ingredients</h3>
+                    <div class="result-ingredients">
+            `
+
+            ingredients = result_info["ingredients"]
+            ingredients = ingredients.split(/[,]+/);
+            for (ingredient of ingredients) {
+                interior = interior + `<span>${ingredient}</span>`
+            }
+
+            interior = interior + `
+                    </div>
+                </div>
+            `
+
+            if (result_info["dietary_requirements"].length > 0) {
+                interior = interior + `
+                    <div style="grid-row: 2; grid-column: 2;">
+                        <h3 style="text-align: left">Dietary Requirements</h3>
+                        <div class="result-dietary-reqs">
+                `
+
+                for (dietary_req of result_info["dietary_requirements"]) {
+                    interior = interior + `<span>${dietary_req}</span>`
+                }
+
+                interior = interior + `
+                        </div>
+                    </div>
+                `
+            }
+
+            result_dom.innerHTML = interior
+
+            return result_dom;
+        }
+
+        results_list_dom = document.getElementById("results-list")
+
         document.getElementById("recipe-form").addEventListener("submit", function(event) {
             event.preventDefault(); // Prevent default form submission
 
@@ -69,7 +131,7 @@
                 dietary_requirements: dietary_reqs,
                 cuisine: document.getElementById("cuisine").value
             };
-            console.log(formData)
+            // console.log(formData)
 
             // Send POST request to Flask server
             fetch("/", {
@@ -79,9 +141,13 @@
                 },
                 body: JSON.stringify(formData)
             })
-            .then(response => response.text())
+            .then(response => response.json())
             .then(data => {
+                results_list_dom.innerHTML = ""
                 console.log(data); // Log server response
+                for (result of data) {
+                    results_list_dom.appendChild(generate_result_element(result))
+                }
                 alert("Ingredients submitted successfully!");
             })
             .catch(error => {
