@@ -61,8 +61,9 @@ def matching_scores(ingredients: set[str], recipe: dict) -> tuple[int, int]:
     scores = (-num_missing, len(common_ingredients))
     return scores
 
-def ingredients_satisfied(unused_ingredients: set[str], recipe: dict) -> bool:
-        return get_ingredients(recipe) == unused_ingredients
+def ingredients_satisfied(ingredients: set[str], recipe: dict) -> bool:
+        ''' Return True if the recipe can be made by the ingredients, else return False '''
+        return matching_scores(ingredients, recipe)[0] == 0
 
 def get_meal_makable(ingredients: set[str], recipes: list[dict], meal: list[dict] = []): 
     if not recipes or not ingredients: 
@@ -71,9 +72,9 @@ def get_meal_makable(ingredients: set[str], recipes: list[dict], meal: list[dict
     if ingredients_satisfied(ingredients, recipes[0]): 
         meal_using_recipe = get_meal_makable(ingredients.difference(get_ingredients(recipes[0])), recipes[1:], meal+[recipes[0]])
         meal_without_recipe = get_meal_makable(ingredients, recipes[1:], meal)
-        return sorted([meal_using_recipe, meal_without_recipe])[0][-1]
+        return sorted([meal_using_recipe, meal_without_recipe])[0]
     else: 
-        return get_meal_makable(ingredients, recipes[1:], meal)[-1]
+        return get_meal_makable(ingredients, recipes[1:], meal)
     
      # store the recipes based on the ingredients they used and not used 
     # not_used = defaultdict(list)
@@ -130,31 +131,32 @@ def make_meal(ingredients: set[str], recipes: list[dict]) -> list[dict]:
         - Each ingredient should only be used in at most one recipe. 
         - If there exist one recipe that can be made without missing ingredients, 
         we should not return any recipe that contains missing ingredients. 
+        - If there are no recipe that is makable, return all recipes that have 
+        at least one ingredients specified by the user 
     '''
 
     # make all the valid recipes (i.e. that has at least one ingredient matching) into tuple[recipe, matching score]
-    print(recipes)
     valid_recipes = list(filter(lambda r: (matching_scores(ingredients, r)[1] > 0), recipes))
     if not valid_recipes: 
         return []
     valid_recipes_score: tuple[dict, tuple] = list(map(lambda r: (r, matching_scores(ingredients, r)), valid_recipes))
     
-    
-    print("valid recipes score", valid_recipes_score)
-    # sort the valid recipes based on scores 
+    # Sort the valid recipes based on scores 
     valid_recipes_score.sort(key=lambda x: x[1], reverse=True)
-    #return valid_recipes_score
 
-    print("recipe score", valid_recipes_score)
-    most_matching_recipe, most_matching_score = valid_recipes_score[0]
-    score_num_missing, _score_num_matching = most_matching_score
-    if abs(score_num_missing) > 0: 
+    # To understand `num_missing`: 
+    #   valid_recipes_score[0] == highest scored recipe 
+    #   valid_recipes_score[0][1] == the score of the highest scored recipe 
+    #   valid_recipes_score[0][1][0] == the number of missing ingredients of the highest scored recipe (in neg value)
+    num_missing = abs(valid_recipes_score[0][1][0])
+
+    if num_missing > 0: 
         # there are no recipe that has no missing ingredients 
-        return [most_matching_recipe]
+        return list(map(lambda recipe_score: recipe_score[0], valid_recipes_score))
     else: 
         # there are at least one recipe that has no missing ingredients, 
         # so don't return any recipe that has missing ingredients 
-        return get_meal_makable(ingredients, recipes)
+        return get_meal_makable(ingredients, recipes)[-1]
     
 
 
