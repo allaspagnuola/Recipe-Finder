@@ -4,6 +4,7 @@ from bson import ObjectId
 
 
 from db import db
+from recommendation import get_ingredients, get_recommendation
 
 import json
 
@@ -11,14 +12,6 @@ import json
 # Create Flask app to connect front-end, back-end, and database
 app = Flask(__name__)
 bp = Blueprint('auth', __name__, url_prefix='/auth')
-
-
-
-# Part 1: Test Flask
-@app.route("/")
-def flask_mongodb_atlas():
-    return "Hello World"
-
 
 # Part 2: Test API - Insert hard-coded data to test connection to database
 @app.route("/test")
@@ -45,13 +38,14 @@ def get_all():
 
     # For each document, convert _id from type ObjectId to string so it can be JSON serializable
     data = []
-    for doc in all:
+    for doc in all: # doc: dict
         doc["_id"] = str(doc["_id"])
         data.append(doc)
 
 
     # Return as JSON type
     return jsonify(data)
+
 
 # Part 4: HTTP Post method - API to insert one recipe into the database
 @app.route("/insert-one", methods=["POST"])
@@ -64,7 +58,9 @@ def insert_one():
     dict_to_return = {
         "name": input_json["name"],
         "ingredients": input_json["ingredients"],
-        "method": input_json["method"],
+        "dietary_requirements" : input_json["dietary_requirements"],
+        "cuisine": input_json["cuisine"],
+        
     }
     db.collection.insert_one(dict_to_return)
     # the above call mutates dict_to_return to include the _id of the new entry
@@ -91,20 +87,24 @@ def remove_one():
 
 
     return f"successfully deleted {dict_to_query['_id']}"
+
 @app.route('/insert', methods=('GET', 'POST'))
-def insert():
+def register():
     if request.method == 'POST':
         name = request.form["name"]
         ingredients = request.form["ingredients"]
-        method = request.form["method"]
+        dietary_requirements = request.form["dietary_requirements"]
+        cuisine = request.form["cuisine"]
+
         error = None
 
         if not name:
             error = 'Name is required.'
         elif not ingredients:
             error = 'Ingredient is required.'
-        elif not method:
-            error = 'Method is required.'
+        elif not cuisine:
+            error = 'You need to choose one cuisine.'
+
 
         
         # REMEMBER to add 
@@ -112,13 +112,15 @@ def insert():
             dict_to_return = {
                 "name": name,
                 "ingredients": ingredients,
-                "method": method,
+                "dietary_requirements": dietary_requirements,
+                "cuisine": cuisine
             }
             db.collection.insert_one(dict_to_return)
 
         flash(error)
 
     return render_template("insert.html")
+
 
 '''
 Some more stuff
@@ -205,7 +207,7 @@ def login_required(view):
 
 
 
-@app.route('/home', methods=('GET', 'POST'))
+@app.route('/', methods=('GET', 'POST'))
 def search():
     '''
     returns a dictionary containing keys "ingredients", "dietary requirements", "cuisine"
@@ -221,6 +223,22 @@ def search():
         return jsonify(dict_to_return)
         
     return render_template("home.html")
+
+# Testing get_ingredients
+@app.route("/get-ingredients")
+def data_processing():
+    all = db.collection.find()
+    ingredients =[]
+    for doc in all:
+        ingredients.append(list(get_ingredients(doc)))
+ 
+    return ingredients
+
+# Testing recommendation results 
+@app.route("/get-recommendation/<ingredients>")
+def test_get_recommendations(ingredients): 
+    ingredients = set(ingredients.split(','))
+    return get_recommendation(ingredients)
 
 
 if __name__ == "__main__":

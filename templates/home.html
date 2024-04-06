@@ -5,6 +5,7 @@
     <title>Recipe Finder</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="/static/home.css">
+    <link rel="stylesheet" href="/static/style.css">
 </head>
 
 <body>
@@ -14,15 +15,15 @@
         <p>We provide you with recipes</p>
 
         <nav class="navbar">
-            <a href="#">Recipe Finder</a>
-            <a href="{{ url_for('insert') }}">Update Recipe</a>
-            <a href="#">User Login</a>
+            <a href="{{ url_for('search') }}">Recipe Finder</a>
+            <a href="{{ url_for('register') }}">Update Recipe</a>
+            <a href="{{ url_for('auth.login') }}">User Login</a>
         </nav>
 
-        <form id="recipe-form" action="/home" method="post">
+        <form id="recipe-form" action="/" method="post">
             <input type="text" id="ingredients" placeholder="Please enter your ingredients, separated by commas">
 
-            <p>Dietary Requirements</p>
+            <h3>Put Your Dietary Requirements</h3>
             <div id="dietary-reqs" class="checkbox-container">
                 <div>
                     <input type="checkbox" id="gluten-free" name="gluten-free">
@@ -35,7 +36,8 @@
             </div>
             
             <div class="select-container">
-                <label for="cuisine">Cuisine</label>
+                <h3>Choose Your Favorite Cuisine</h3>
+                <label for="cuisine"></label>
                 <select id="cuisine">
                     <option value="mexican">Mexican</option>
                     <option value="greek">Greek</option>
@@ -70,7 +72,7 @@
             console.log(formData)
 
             // Send POST request to Flask server
-            fetch("/home", {
+            fetch("/", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
