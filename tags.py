@@ -9,14 +9,16 @@ class DietaryRequirement(Enum):
     VEGETARIAN = "vegetarian"
 
 class Region(Enum): 
-    AUSTRALIAN = "Australian"
-    CHINESE = "Chinese"
-    FRENCH = "French"
-    INDIAN = "Indian"
-    ITALIAN = "Italian"
-    JAPANESE = "Japanese"
-    KOREAN = "Korean"
-    MALAYSIAN = "Malaysian"
+    australian = "australian"
+    chinese = "chinese"
+    french = "french"
+    indian = "indian"
+    italian = "italian"
+    japanese = "japanese"
+    korean = "korean"
+    malaysian = "malaysian"
+    mexican = "mexican"
+    greek = "greek"
 
 
     

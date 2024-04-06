@@ -16,16 +16,20 @@ def get_ingredients(recipe: dict) -> set[str]:
 
 def get_dietary_requirements(recipe: dict) -> set[DietaryRequirement]: 
     ''' Get all the dietary requirements from a recipe. '''
-    requirements: list[str] = [] # need to get a list of strings from the 
-
-    return set(map(lambda x: getattr(DietaryRequirement, x), requirements))
+    dietary_requirement = []
+    try:
+        for dr in recipe['dietary_requirements']:
+            dietary_requirement.append(set(map(lambda x: getattr(DietaryRequirement, x), dr)))
+    except:
+        pass
+    return set(dietary_requirement)
 
 
 def get_regions(recipe: dict) -> set[Region]: # or maybe not returning a list if each recipe can only have one region 
     ''' Get all the regions from a recipe. '''
-    regions: list[str] = [] # need to get a list of strings from the 
+    regions=recipe["cuisine"] # need to get a list of strings from the 
 
-    return set(map(lambda x: getattr(Region, x), regions))
+    return set([Region[regions].value])
 
 
 def requirements_satisfied(requirements: set[DietaryRequirement], recipe: dict) -> bool:

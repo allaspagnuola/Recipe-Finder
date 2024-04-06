@@ -4,7 +4,7 @@ from bson import ObjectId
 
 
 from db import db
-from recommendation import get_ingredients, get_recommendation
+from recommendation import get_ingredients, get_recommendation, get_dietary_requirements, get_regions
 
 import json
 
@@ -218,7 +218,7 @@ def search():
             "cuisine": input_json["cuisine"]
         }
 
-        return jsonify(dict_to_return)
+        return get_recommendation(get_ingredients(dict_to_return), get_dietary_requirements(dict_to_return), get_regions(dict_to_return))
         
     return render_template("home.html")
 
