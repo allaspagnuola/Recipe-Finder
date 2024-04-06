@@ -129,3 +129,44 @@ p {
     color: #555;
     margin-bottom: 10px;
 }
+
+
+#results-list {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.result-entry {
+    min-height: 10rem;
+    border-radius: 1rem;
+    border: 1px var(--white-2) solid;
+    box-shadow: 1px 1px 2.5px rgb(0 0 0 / 20%);
+    padding: 2rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 3rem;
+    grid-auto-rows: fit-content;
+}
+
+@media (max-width: 480px) {
+    .result-entry {
+        flex-flow: column;
+        column-gap: 2em;
+    }
+}
+@media (min-width: 480px) {
+    .result-entry {
+        flex-flow: row;
+        row-gap: 0em;
+    }
+}
+
+.result-dietary-reqs,
+.result-ingredients {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    row-gap: 0.5rem;
+    padding-left: 0.5rem;
+}
