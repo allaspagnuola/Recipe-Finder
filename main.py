@@ -4,6 +4,7 @@ from bson import ObjectId
 
 
 from db import db
+from recommendation import get_ingredients, get_recommendation
 
 import json
 
@@ -45,7 +46,7 @@ def get_all():
 
     # For each document, convert _id from type ObjectId to string so it can be JSON serializable
     data = []
-    for doc in all:
+    for doc in all: # doc: dict
         doc["_id"] = str(doc["_id"])
         data.append(doc)
 
@@ -53,6 +54,17 @@ def get_all():
     # Return as JSON type
     return jsonify(data)
 
+@app.route("/get-ingredients")
+def data_processing():
+    all = db.collection.find()
+    ingredients =[]
+    for doc in all:
+        ingredients.append(list(get_ingredients(doc)))
+ 
+    return ingredients
+
+
+# Part 4: HTTP Post method - API to insert one recipe into the database
 @app.route("/insert-one", methods=["POST"])
 def insert_one():
     input_json = request.get_json()
