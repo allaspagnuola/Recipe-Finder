@@ -1,7 +1,6 @@
 from tags import DietaryRequirement, Region
 from db import db 
 from collections import defaultdict
-import pulp as pl   # need to "pip install pulp" on the terminal if you haven't; but this is not used for now
 
 
 def get_ingredients(recipe: dict) -> set[str]:
@@ -52,6 +51,8 @@ def region_contained(regions: set[Region], recipe: dict) -> bool:
 def matching_scores(ingredients: set[str], recipe: dict) -> tuple[int, int]: 
     ''' Return a tuple of integers (number-of-missing-ingredients, number-of-matching-ingredients) 
         that represent the priority of the recipe.
+
+        When sorting, we should set reverse=True to get the most matching recipe at the start. 
     '''
     # Get the number of matching ingredients  
     def standardize_ingredients(ingredients): 
@@ -72,6 +73,7 @@ def ingredients_satisfied(ingredients: set[str], recipe: dict) -> bool:
         ''' Return True if the recipe can be made by the ingredients, else return False '''
         return matching_scores(ingredients, recipe)[0] == 0
 
+
 def get_meal_makable(ingredients: set[str], recipes: list[dict], meal: list[dict] = []): 
     if not recipes or not ingredients: 
         return (len(ingredients), meal)
@@ -82,6 +84,7 @@ def get_meal_makable(ingredients: set[str], recipes: list[dict], meal: list[dict
         return sorted([meal_using_recipe, meal_without_recipe])[0]
     else: 
         return get_meal_makable(ingredients, recipes[1:], meal)
+
 
 def make_meal(ingredients: set[str], recipes: list[dict]) -> list[dict]:
     ''' Give a combination of dishes to make a meal based on the ingredients.
