@@ -13,14 +13,6 @@ import json
 app = Flask(__name__)
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 
-
-
-# Part 1: Test Flask
-@app.route("/")
-def flask_mongodb_atlas():
-    return "Hello World"
-
-
 # Part 2: Test API - Insert hard-coded data to test connection to database
 @app.route("/test")
 def test():
@@ -213,7 +205,7 @@ def login_required(view):
 
 
 
-@app.route('/home', methods=('GET', 'POST'))
+@app.route('/', methods=('GET', 'POST'))
 def search():
     '''
     returns a dictionary containing keys "ingredients", "dietary requirements", "cuisine"

@@ -16,11 +16,11 @@
 
         <nav class="navbar">
             <a href="{{ url_for('search') }}">Recipe Finder</a>
-            <a href="{{ url_for('insert') }}">Update Recipe</a>
+            <a href="{{ url_for('register') }}">Update Recipe</a>
             <a href="{{ url_for('auth.login') }}">User Login</a>
         </nav>
 
-        <form id="recipe-form" action="/home" method="post">
+        <form id="recipe-form" action="/" method="post">
             <input type="text" id="ingredients" placeholder="Please enter your ingredients, separated by commas">
 
             <h3>Put Your Dietary Requirements</h3>
@@ -72,7 +72,7 @@
             console.log(formData)
 
             // Send POST request to Flask server
-            fetch("/home", {
+            fetch("/", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
