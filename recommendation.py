@@ -1,10 +1,10 @@
 from tags import DietaryRequirement, Region
 from db import db 
 from collections import defaultdict
-import pulp as pl   # need to "pip install pulp" on the terminal if you haven't
+import pulp as pl   # need to "pip install pulp" on the terminal if you haven't; but this is not used for now
 
 def get_ingredients(recipe: dict) -> set[str]:
-    ''' Get all the ingredients from a recipe '''
+    ''' Helper function. Get all the ingredients from a recipe. '''
     ingredients = []
     try:
         for ingredient in recipe['ingredients'].split(','):
@@ -14,13 +14,13 @@ def get_ingredients(recipe: dict) -> set[str]:
     return set(ingredients)
 
 def get_dietary_requirements(recipe: dict) -> set[DietaryRequirement]: 
-    ''' Get all the dietary requirement from a recipe '''
+    ''' Get all the dietary requirements from a recipe. '''
     requirements: list[str] = [] # need to get a list of strings from the 
 
     return set(map(lambda x: getattr(DietaryRequirement, x), requirements))
 
 def get_regions(recipe: dict) -> set[Region]: # or maybe not returning a list if each recipe can only have one region 
-    ''' Get all the regions from a recipe '''
+    ''' Get all the regions from a recipe. '''
     regions: list[str] = [] # need to get a list of strings from the 
 
     return set(map(lambda x: getattr(Region, x), regions))
@@ -34,7 +34,7 @@ def requirements_satisfied(requirements: set[DietaryRequirement], recipe: dict) 
     return True
 
 def region_contained(regions: set[Region], recipe: dict) -> bool: 
-    ''' Check if the recipe's region is contained in the regions specified '''
+    ''' Check if the recipe's region is in the selection if there regions specified '''
     if not regions: 
         return True
     recipe_region = get_regions(recipe)
@@ -43,9 +43,9 @@ def region_contained(regions: set[Region], recipe: dict) -> bool:
             return True
     return False 
 
-def matching_scores(ingredients: set[str], recipe: dict) -> tuple: 
-    ''' Return a tuple of integers that represent the priority of the recipe 
-        based on the number of matches on the input ingredients
+def matching_scores(ingredients: set[str], recipe: dict) -> tuple[int, int]: 
+    ''' Return a tuple of integers (number-of-missing-ingredients, number-of-matching-ingredients) 
+        that represent the priority of the recipe.
     '''
     # Get the number of matching ingredients  
     def standardize_ingredients(ingredients): 
@@ -134,11 +134,12 @@ def make_meal(ingredients: set[str], recipes: list[dict]) -> list[dict]:
 
     # make all the valid recipes (i.e. that has at least one ingredient matching) into tuple[recipe, matching score]
     print(recipes)
-    valid_recipes = list(filter(lambda r: matching_scores(ingredients, r)[1] > 0, recipes))
+    valid_recipes = list(filter(lambda r: (matching_scores(ingredients, r)[1] > 0), recipes))
     if not valid_recipes: 
         return []
     valid_recipes_score: tuple[dict, tuple] = list(map(lambda r: (r, matching_scores(ingredients, r)), valid_recipes))
     
+    return valid_recipes_score
     print("valid recipes score", valid_recipes_score)
     # sort the valid recipes based on scores 
     valid_recipes_score.sort(key=lambda x: x[1], reverse=True)
@@ -166,8 +167,8 @@ def get_recommendation(ingredients: set[str], dietary_requirements: set[DietaryR
             recipes.append(recipe)
 
     # print(recipes)
-    #recipes = make_meal(ingredients, recipes)
+    recipes = make_meal(ingredients, recipes)
 
-    recipes.sort(key=lambda r: matching_scores(ingredients, r), reverse=True)
+    #recipes.sort(key=lambda r: matching_scores(ingredients, r), reverse=True)
     
     return recipes 
