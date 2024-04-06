@@ -194,15 +194,6 @@ def logout():
     session.clear()
     return redirect(url_for('search'))
 
-def login_required(view):
-    @functools.wraps(view)
-    def wrapped_view(**kwargs):
-        if g.user is None:
-            return redirect(url_for('login'))
-
-        return view(**kwargs)
-
-    return wrapped_view
 
 
 
@@ -219,8 +210,8 @@ def search():
             "dietary requirements": input_json["dietary_requirements"],
             "cuisine": input_json["cuisine"]
         }
-
-        return get_recommendation(get_ingredients(dict_to_return), get_dietary_requirements(dict_to_return), get_regions(dict_to_return))
+        print(get_recommendation(get_ingredients(dict_to_return), get_dietary_requirements(dict_to_return), get_regions(dict_to_return)))
+        return jsonify(get_recommendation(get_ingredients(dict_to_return), get_dietary_requirements(dict_to_return), get_regions(dict_to_return)))
         
     return render_template("home.html")
 
@@ -249,4 +240,3 @@ if __name__ == "__main__":
     url_for('static', filename='insert.css')
     url_for('static', filename='home.css')
     url_for('static', filename='navbar.css')
-    url_for('static', filename='auth.css')
