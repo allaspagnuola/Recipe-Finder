@@ -1,4 +1,5 @@
-from flask import Flask, jsonify, request, render_template, flash, Blueprint, url_for
+from flask import Flask, jsonify, request, render_template, flash, Blueprint, url_for, session, redirect, g
+from werkzeug.security import check_password_hash, generate_password_hash
 from bson import ObjectId
 
 
@@ -46,16 +47,12 @@ def get_all():
     data = []
     for doc in all:
         doc["_id"] = str(doc["_id"])
-        try: 
-            data.append(doc["ingredients"])
-        except:
-            pass
+        data.append(doc)
 
 
     # Return as JSON type
     return jsonify(data)
 
-# Part 4: HTTP Post method - API to insert one recipe into the database
 @app.route("/insert-one", methods=["POST"])
 def insert_one():
     input_json = request.get_json()
@@ -110,10 +107,8 @@ def register():
             error = 'Name is required.'
         elif not ingredients:
             error = 'Ingredient is required.'
-        # elif not dietary_requirements:
-        #     error = 'dietary_requirements is required.'
         elif not cuisine:
-            error = 'cuisine.'
+            error = 'You need to choose one cuisine.'
 
 
         
@@ -149,12 +144,15 @@ def register():
         elif not password:
             error = 'Password is required.'
 
+        if db.collection.find_one({"username" : username}) != None:
+            error = 'Username is taken.'
+
         
         # REMEMBER to add 
         if not error:
             dict_to_return = {
                 "username": username,
-                "password": password,
+                "password": generate_password_hash(password),
             }
             db.collection.insert_one(dict_to_return)
 
@@ -167,9 +165,9 @@ def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        
-        user = db.Collection_name.find({"username" : username})
+        error = None
 
+        user = db.collection.find_one({"username" : username})
 
         if user is None:
             error = 'Incorrect username.'
@@ -178,13 +176,13 @@ def login():
 
         if error is None:
             session.clear()
-            session['user_id'] = user['id']
-            return redirect(url_for('index'))
+            session['user_id'] = str(user['_id'])
+            return redirect(url_for('search'))
 
         flash(error)
 
     return render_template('auth/login.html')
-'''
+
 @bp.before_app_request
 def load_logged_in_user():
     user_id = session.get('user_id')
@@ -192,14 +190,12 @@ def load_logged_in_user():
     if user_id is None:
         g.user = None
     else:
-        g.user = get_db().execute(
-            'SELECT * FROM user WHERE id = ?', (user_id,)
-        ).fetchone()
+        g.user = db.collection.find_one({"_id" : ObjectId(user_id)})
 
 @bp.route('/logout')
 def logout():
     session.clear()
-    return redirect(url_for('index'))
+    return redirect(url_for('search'))
 
 def login_required(view):
     @functools.wraps(view)
@@ -211,9 +207,25 @@ def login_required(view):
 
     return wrapped_view
 
-'''
 
 
+
+@app.route('/home', methods=('GET', 'POST'))
+def search():
+    '''
+    returns a dictionary containing keys "ingredients", "dietary requirements", "cuisine"
+    '''
+    if request.method == 'POST':
+        input_json = request.json
+        dict_to_return = {
+            "ingredients": input_json["ingredients"],
+            "dietary requirements": input_json["dietary_requirements"],
+            "cuisine": input_json["cuisine"]
+        }
+
+        return jsonify(dict_to_return)
+        
+    return render_template("home.html")
 
 
 if __name__ == "__main__":
@@ -221,3 +233,6 @@ if __name__ == "__main__":
     app.register_blueprint(bp)
     app.run(port=8000, debug=True)
     url_for('static', filename='style.css')
+    url_for('static', filename='insert.css')
+    url_for('static', filename='home.css')
+    url_for('static', filename='navbar.css')

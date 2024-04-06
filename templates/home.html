@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Recipe Finder</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/static/home.css">
+</head>
+
+<body>
+    <div class="container">
+        <h1>Recipe Finder</h1>
+        <p>Share your ingredients</p>
+        <p>We provide you with recipes</p>
+
+        <nav class="navbar">
+            <a href="#">Recipe Finder</a>
+            <a href="{{ url_for('insert') }}">Update Recipe</a>
+            <a href="#">User Login</a>
+        </nav>
+
+        <form id="recipe-form" action="/home" method="post">
+            <input type="text" id="ingredients" placeholder="Please enter your ingredients, separated by commas">
+
+            <p>Dietary Requirements</p>
+            <div id="dietary-reqs" class="checkbox-container">
+                <div>
+                    <input type="checkbox" id="gluten-free" name="gluten-free">
+                    <label for="gluten-free">Gluten Free</label>
+                </div>
+                <div>
+                    <input type="checkbox" id="lactose-free" name="lactose-free">
+                    <label for="lactose-free">Lactose Free</label>
+                </div>
+            </div>
+            
+            <div class="select-container">
+                <label for="cuisine">Cuisine</label>
+                <select id="cuisine">
+                    <option value="mexican">Mexican</option>
+                    <option value="greek">Greek</option>
+                    <option value="french">French</option>
+                    <option value="chinese">Chinese</option>
+                </select>
+            </div>
+            <button type="submit" class="search-btn">Search</button>
+        </form>
+    </div>
+    
+    <script>
+        document.getElementById("recipe-form").addEventListener("submit", function(event) {
+            event.preventDefault(); // Prevent default form submission
+
+            dietary_reqs = []
+            dietary_reqs_dom = document.getElementById("dietary-reqs")
+                                       .getElementsByTagName("input");
+
+            console.log(dietary_reqs_dom)
+            for (const child of dietary_reqs_dom) {
+                if (child.checked) {
+                    dietary_reqs.push(child.name)
+                }
+            }
+            
+            var formData = {
+                ingredients: document.getElementById("ingredients").value,
+                dietary_requirements: dietary_reqs,
+                cuisine: document.getElementById("cuisine").value
+            };
+            console.log(formData)
+
+            // Send POST request to Flask server
+            fetch("/home", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.text())
+            .then(data => {
+                console.log(data); // Log server response
+                alert("Ingredients submitted successfully!");
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                alert("An error occurred. Please try again.");
+            });
+        });
+    </script>
+</body>
+</html>

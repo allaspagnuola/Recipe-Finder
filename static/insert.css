@@ -1,0 +1,140 @@
+
+body {
+    background-color: var(--white-2);
+    color: #3b4252;
+    font-family: Roboto;
+    padding: 0;
+    margin: 0;
+}
+
+#page-static {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+#content-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#content-main-card {
+    box-shadow: 5px 5px 10px rgb(0 0 0 / 20%);
+    background-color: var(--white-1);
+
+    padding: 48px;
+    margin: 2em;
+    border-radius: 2em;
+
+    display: flex;
+}
+
+@media (max-width: 960px) {
+    #content-main-card {
+        flex-flow: column;
+        column-gap: 2em;
+    }
+}
+@media (min-width: 960px) {
+    #content-main-card {
+        flex-flow: row;
+        row-gap: 0em;
+    }
+}
+
+
+#card-header {
+    padding: 1em;
+    padding-bottom: 0;
+}
+
+#card-header h1 {
+    font-size: 2.5em;
+    font-weight: 400;
+}
+
+#card-header p {
+    max-width: 25em;
+}
+
+#card-content {
+    padding: 1em;
+    padding-bottom: 0;
+}
+
+#recipe-form {
+    display: flex;
+    flex-flow: column nowrap;
+}
+
+#recipe-form label, #recipe-form p {
+    margin: 0;
+    font-size: small;
+    font-weight: 400;
+    color: var(--black-5);
+}
+
+#recipe-form > input,
+#recipe-form > select,
+#recipe-form > textarea,
+#recipe-form .checkbox-container {
+    margin: 8px 0 24px 0;
+    font-family: inherit;
+    font-size: 1rem;
+    min-width: 15rem;
+    max-width: min(30rem, 80vw);
+    padding: 0.5rem;
+}
+
+#recipe-form > input,
+#recipe-form > select,
+#recipe-form > textarea {
+    background-color: transparent;
+    border: #808080 1px solid;
+    border-radius: 2px;
+}
+
+#recipe-form > input:focus,
+#recipe-form > select:focus,
+#recipe-form > textarea:focus {
+    border: var(--blue-1) 1px solid;
+}
+
+#recipe-form .checkbox-container {
+    display: flex;
+    flex-direction: column;
+    row-gap: 1em;
+}
+#recipe-form .checkbox-container > * {
+    margin: 0;
+    display: grid;
+    grid-template-columns: 2em 1fr;
+}
+
+.checkbox-container > * > input {
+    grid-column: 1;
+    margin: 0;
+    padding: 0;
+}
+
+.checkbox-container > * > label {
+    grid-column: 2;
+}
+
+#submit-row {
+    width: 100%;
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+.submit-button {
+    background: var(--blue-2);
+    color: white;
+}
+.submit-button:hover {
+    background: var(--blue-3);
+}
