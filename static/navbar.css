@@ -1,5 +1,5 @@
 
-#navbar {
+nav {
     display: flex;
     flex-flow: row-reverse nowrap;
     background-color: var(--white-2);
@@ -11,7 +11,7 @@
     column-gap: 1em;
 }
 
-#navbar > * {
+nav > * {
     font-size: 1rem;
     font-family: inherit;
     width: 8rem;
@@ -43,12 +43,26 @@
     background-color: rgb(0 0 0 / 20%);
 }
 
+#logout {
+    color: var(--black-3);
+    background-color: rgb(0 0 0 / 5%);
+}
+#logout:hover {
+    background-color: rgb(0 0 0 / 10%);
+}
+#logout:active {
+    background-color: rgb(0 0 0 / 20%);
+}
+
 #logo {
     font-size: 2em;
+    color: black;
+    text-decoration: none;
     user-select: none;
     font-family: 'Courier New';
 }
 
-#logo:hover {
-    cursor: pointer;
+nav > .navbar-button {
+    text-decoration: none;
+    box-sizing: border-box;
 }

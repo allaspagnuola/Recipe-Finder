@@ -13,9 +13,78 @@
     --blue-1: #88c0d0;
     --blue-2: #81a1c1;
     --blue-3: #5e81ac;
+
+    --red: #bf616a;
 }
 
-button {
+body {
+    background-color: var(--white-2);
+    color: #3b4252;
+    font-family: Roboto;
+    padding: 0;
+    margin: 0;
+}
+
+#page-static {
+    min-height: 100vh;
+    max-width: 960px;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+#content-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#content-main-card {
+    box-shadow: 5px 5px 10px rgb(0 0 0 / 20%);
+    background-color: var(--white-1);
+
+    padding: 48px;
+    margin: 2em;
+    border-radius: 2em;
+
+    display: flex;
+}
+
+@media (max-width: 960px) {
+    #content-main-card {
+        flex-flow: column;
+        column-gap: 2em;
+    }
+}
+@media (min-width: 960px) {
+    #content-main-card {
+        flex-flow: row;
+        row-gap: 0em;
+    }
+}
+
+#card-header h1 {
+    font-size: 2.5em;
+    font-weight: 400;
+}
+
+#card-header p {
+    max-width: 25em;
+    color: var(--black-4);
+}
+
+#card-content {
+    padding: 1em;
+    padding-bottom: 0;
+    display: inline-flex;
+    flex-flow: column nowrap;
+}
+
+.clickable {
     position: relative;
     border-radius: 1em;
     border: none;
@@ -23,7 +92,7 @@ button {
     font-weight: 600;
 }
 
-button::after {
+.clickable::after {
     content: '';
     position: absolute;
     border-radius: 1em;
@@ -37,7 +106,7 @@ button::after {
     transition: color 0.1s ease-in-out;
 }
 
-button::before {
+.clickable::before {
     content: '';
     position: absolute;
     border-radius: 1em;
@@ -51,14 +120,14 @@ button::before {
     transition: color 0.1s ease-in-out;
 }
 
-button:hover::after {
+.clickable:hover::after:not(.invalid) {
     opacity: 1;
 }
 
-button:active::after {
+.clickable:active::after:not(.invalid) {
     opacity: 0;
 }
 
-button:active::before {
+.clickable:active::before:not(.invalid) {
     opacity: 1;
 }

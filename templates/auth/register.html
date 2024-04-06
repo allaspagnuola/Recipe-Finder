@@ -1,15 +1,128 @@
 {% extends 'base.html' %}
 
-{% block header %}
-  <h1>{% block title %}Register{% endblock %}</h1>
+{% block title %}Register{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='auth.css') }}">
 {% endblock %}
 
 {% block content %}
-  <form method="post">
-    <label for="username">Username</label>
-    <input name="username" id="username" required>
-    <label for="password">Password</label>
-    <input type="password" name="password" id="password" required>
-    <input type="submit" value="Register">
-  </form>
+<div id="content-main-card">
+    <div id="card-content">
+        <div id="card-header">
+            <h1>Register</h1>
+            <p>
+                Access your favourite recipes or automatically filter results
+                based on your dietary requirements.
+            </p>
+            <p>
+                The password must meet the following requirements.
+            </p>
+            <ul>
+                <li>Minimum of 8 characters.</li>
+                <li>Contains at least 1 special character.</li>
+                <li>Contains at least 1 number.</li>
+            </ul>
+        </div>
+        <div style="flex:1"></div>
+        <div style="display:none" id="error">
+            <span class="material-symbols-outlined">error</span>
+            <span id="error-message" style="max-width:22em"></span>
+        </div>
+    </div>
+    
+    <div id="card-content">
+        <form id="form">
+            <label for="username">Username</label>
+            <input name="username" id="username" required>
+            <label for="password">Password</label>
+            <input type="password" name="password" id="password" required>
+            <label for="confirm-password">Confirm Password</label>
+            <input type="password" name="confirm-password" id="confirm-password" required>
+            
+            <div id="submit-row">
+                <input type="submit" id="register-button" class="submit-button clickable invalid" value="Register">
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    form = document.getElementById("form")
+    dom_error = document.getElementById("error")
+    dom_error_msg = document.getElementById("error-message")
+    register_button = document.getElementById("register-button")
+    password_input = document.getElementById("password")
+    confirm_password_input = document.getElementById("confirm-password")
+
+    is_disabled = false
+
+    function display_error(error) {
+        dom_error.style.display = "flex";
+        dom_error_msg.innerHTML = error;
+    }
+
+    form.addEventListener("submit", (event) => {
+        event.preventDefault();
+        
+        if (is_disabled) {
+            return;
+        }
+
+        password = document.getElementById("password").value
+        // check requirements
+        if (password.length < 8) {
+            display_error("Password must be at least 8 characters.")
+            return
+        }
+
+        pw_req_regex = /(?=.*?[0-9])(?=.*?[#?!@$%^&*-])/
+        if (!pw_req_regex.test(password)) {
+            display_error("Password must contain at least 1 number and 1 special character.")
+            return
+        }
+
+        const formData = new FormData();
+        formData.append("username", document.getElementById("username").value)
+        formData.append("password", password)
+
+        // Send POST request to Flask server
+        fetch("{{ url_for('auth.register') }}", {
+            method: "POST",
+            body: formData
+        })
+        .then(response => {
+            if (!response.ok) {
+                response.text().then(error => {
+                    display_error(error)
+                    console.error("Error:", error);
+                })
+                return;
+            }
+
+            window.location.href = "{{ url_for('auth.login') }}"
+        })
+    })
+
+    function disable_register() {
+        is_disabled = true;
+        register_button.className = "submit-button clickable invalid"
+        confirm_password_input.className = "invalid"
+    }
+    function enable_register() {
+        is_disabled = false;
+        register_button.className = "submit-button clickable"
+        confirm_password_input.className = ""
+    }
+
+    confirm_password_input.addEventListener("focusout", function (event) {
+        if (password_input.value != confirm_password_input.value) {
+            disable_register()
+        } else {
+            enable_register()
+        }
+    })
+</script>
 {% endblock %}
