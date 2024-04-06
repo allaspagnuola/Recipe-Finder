@@ -54,15 +54,6 @@ def get_all():
     # Return as JSON type
     return jsonify(data)
 
-@app.route("/get-ingredients")
-def data_processing():
-    all = db.collection.find()
-    ingredients =[]
-    for doc in all:
-        ingredients.append(list(get_ingredients(doc)))
- 
-    return ingredients
-
 
 # Part 4: HTTP Post method - API to insert one recipe into the database
 @app.route("/insert-one", methods=["POST"])
@@ -238,6 +229,22 @@ def search():
         return jsonify(dict_to_return)
         
     return render_template("home.html")
+
+# Testing get_ingredients
+@app.route("/get-ingredients")
+def data_processing():
+    all = db.collection.find()
+    ingredients =[]
+    for doc in all:
+        ingredients.append(list(get_ingredients(doc)))
+ 
+    return ingredients
+
+# Testing recommendation results 
+@app.route("/get-recommendation/<ingredients>")
+def test_get_recommendations(ingredients): 
+    ingredients = set(ingredients.split(','))
+    return get_recommendation(ingredients)
 
 
 if __name__ == "__main__":
